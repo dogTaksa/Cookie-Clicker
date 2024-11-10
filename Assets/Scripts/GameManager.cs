@@ -29,9 +29,11 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        cookiesTotal = PlayerPrefs.GetInt("cookiesTotal");
+        cookiesTotal = PlayerPrefs.GetInt("cookiesTotal", 0);
         grandmaCount = PlayerPrefs.GetInt("granniesTotal");
         cursorCount = PlayerPrefs.GetInt("cursorsTotal");
+
+        cursorCostText.text = (Convert.ToInt64(cursorCostText)*Math.Pow(1.15, cursorCount)).ToString();
 
         cursorCountText.text = cursorCount.ToString();
         grandmaCountText.text = grandmaCount.ToString();
