@@ -519,14 +519,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cookiesTotal: 0
+  CPS: 0
   cookiesTotalText: {fileID: 565166030}
+  cookiesPerSecondText: {fileID: 667181806}
   clickTimer: 0
   grannyBtn: {fileID: 509613334}
   grandmaCountText: {fileID: 1335880110}
   grandmaCostText: {fileID: 227451133}
+  grandmaCost: 0
+  grandmaBaseCost: 100
+  grandmaCount: 0
+  grandmaCPS: 10
   cursorBtn: {fileID: 685577639}
   cursorCountText: {fileID: 865800581}
   cursorCostText: {fileID: 1293322424}
+  cursorCost: 0
+  cursorBaseCost: 25
+  cursorCount: 0
+  cursorCPS: 2
 --- !u!1 &509613334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1727,7 +1737,7 @@ MonoBehaviour:
       - m_Target: {fileID: 496065565}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: AddClick
-        m_Mode: 4
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

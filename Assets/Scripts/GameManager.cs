@@ -6,19 +6,27 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public long cookiesTotal;
+    public int cookiesTotal;
+    public int CPS;
     public TMP_Text cookiesTotalText;
+    public TMP_Text cookiesPerSecondText;
     public float clickTimer = 0;
 
     public GameObject grannyBtn;
     public TMP_Text grandmaCountText;
     public TMP_Text grandmaCostText;
-    int grandmaCount;
+    public int grandmaCost;
+    public int grandmaBaseCost = 100;
+    public int grandmaCount;
+    public int grandmaCPS = 10;
 
     public GameObject cursorBtn;
     public TMP_Text cursorCountText;
     public TMP_Text cursorCostText;
-    int cursorCount;
+    public int cursorCost;
+    public int cursorBaseCost = 25;
+    public int cursorCount;
+    public int cursorCPS = 2;
 
 
     private void OnApplicationQuit()
@@ -33,10 +41,22 @@ public class GameManager : MonoBehaviour
         grandmaCount = PlayerPrefs.GetInt("granniesTotal");
         cursorCount = PlayerPrefs.GetInt("cursorsTotal");
 
-        cursorCostText.text = (Convert.ToInt64(cursorCostText)*Math.Pow(1.15, cursorCount)).ToString();
-
         cursorCountText.text = cursorCount.ToString();
         grandmaCountText.text = grandmaCount.ToString();
+
+        NewCost();
+    }
+
+    public void NewCost()
+    {
+        grandmaCost = Convert.ToInt32(Math.Round(grandmaBaseCost * Math.Pow(1.15, Convert.ToInt32(grandmaCount))));
+        cursorCost = Convert.ToInt32(Math.Round(cursorBaseCost * Math.Pow(1.15, Convert.ToInt32(cursorCount))));
+
+        cursorCostText.text = cursorCost.ToString();
+        grandmaCostText.text = grandmaCost.ToString();
+
+        CPS = cursorCount * cursorCPS + grandmaCount * grandmaCPS;
+        cookiesPerSecondText.text = CPS.ToString() + "c per second";
     }
     private void Update()
     {
@@ -44,37 +64,51 @@ public class GameManager : MonoBehaviour
 
         if (clickTimer >= 1)
         {
-            AddClick(1);
+            AddClickCPS();
             clickTimer = 0;
         }
 
         cookiesTotalText.text = cookiesTotal.ToString();
     }
-    public void AddClick(float CPS)
+    public void AddClick()
     {
         cookiesTotal++;
+        cookiesTotalText.text = cookiesTotal.ToString();
+    }
+
+    public void AddClickCPS()
+    {
+        cookiesTotal += CPS;
     }
 
     public void BuyGrandma()
     {
-        if (cookiesTotal >= Convert.ToInt64(grandmaCostText.text))
+        if (cookiesTotal >= grandmaCost)
         {
             grandmaCount++;
             grandmaCountText.text = grandmaCount.ToString();
-            cookiesTotal -= Convert.ToInt64(grandmaCostText.text);
+
+            cookiesTotal -= grandmaCost;
             cookiesTotalText.text = cookiesTotal.ToString();
+
+            NewCost();
+
             grannyBtn.gameObject.GetComponent<AudioSource>().Play();
         }
     }
 
     public void BuyCursor()
     {
-        if (cookiesTotal >= Convert.ToInt64(cursorCostText.text))
+        if (cookiesTotal >= cursorCost)
         {
             cursorCount++;
             cursorCountText.text = cursorCount.ToString();
-            cookiesTotal -= Convert.ToInt64(cursorCostText.text);
+
+            cookiesTotal -= cursorCost;
             cookiesTotalText.text = cookiesTotal.ToString();
+
+            NewCost();
+
             cursorBtn.gameObject.GetComponent<AudioSource>().Play();
         }
     }
